@@ -24,9 +24,9 @@ use p5::errors::ProcessingErr;
 fn main() -> Result<(), ProcessingErr> {
     let normal = Normal::new(0.0, 1.0);
     let mut rng = rand::thread_rng();
-    //let glf = p5::Screen::init()?;
-	//let mut screen = p5::Screen::new(300, 300, glf, true, false, false)?;
-    let mut screen = p5::Screen::new(300, 300, true, false, true)?;
+    let glf = p5::Screen::init()?;
+	let mut screen = p5::Screen::new(300, 300, glf, true, false, false)?;
+    //let mut screen = p5::Screen::new(300, 300, true, false, true)?;
 
     let mut ftbf = [0; 600];
     let mut ft = [0; 600];
@@ -37,7 +37,7 @@ fn main() -> Result<(), ProcessingErr> {
     let (tex, _, _) = screen.texture(&img)?;
 
     screen.space_wait();
-    screen.no_cursor()?;
+    screen.no_cursor();
 
     screen.stroke(&[0.], &[0.], &[0.], &[1.]);
     screen.fill(&[0.7], &[0.7], &[0.7], &[1.0]);

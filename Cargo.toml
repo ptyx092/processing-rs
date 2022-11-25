@@ -18,30 +18,31 @@ exclude = [
 build = "build.rs"
 
 [dependencies]
-glium = "0.21"
-gl = "0.6.3"
-nalgebra = "0.16.6"
-image = "0.17.0"
-owning_ref = "0.3.3"
+glium = "0.32.1"
+gl = "0.14.0"
+nalgebra = "0.31.4"
+image = "0.24.5"
+owning_ref = "0.4.1"
+glfw = "0.47.0"
 
 [build-dependencies]
 cc = "1.0"
 
-[features]
-default = []
-glfwp5 = ["glfw"]
+#[features]
+#default = []
+#glfwp5 = ["glfw"]
 
-[dependencies.glfw]
-default-features = false
-version = "0.22"
-features = ["image"]
-optional = true
+#[dependencies.glfw]
+#default-features = false
+#version = "0.47.0"
+#features = ["image"]
+#optional = true
 
 [dev-dependencies]
 rand = "0.5.5"
-num-traits = "0.1.40"
+num-traits = "0.2.15"
 time = "0.1.38"
 
 [target.'cfg(target_os = "macos")'.dependencies]
-cocoa = "0.11.0"
-objc = "0.2.2"
+cocoa = "0.24.1"
+objc = "0.2.7"

@@ -1,12 +1,7 @@
-#[cfg(feature = "glfw")]
+//#[cfg(feature = "glfw")]
 
 use std::str;
 use std::sync::mpsc::Receiver;
-
-#[cfg(target_os = "macos")]
-use cocoa::foundation::{NSProcessInfo, NSString};
-#[cfg(target_os = "macos")]
-use cocoa::base::nil;
 
 use owning_ref;
 use gl;
@@ -90,7 +85,7 @@ impl<'a> Screen<'a> {
         if fullscreen {
             let (mut win, e) = glfw.create_window(w, h, "processingrs", glfw::WindowMode::Windowed)
                 .ok_or(ProcessingErr::GLFWWindowNoCreate)?;
-            glfw.with_primary_monitor_mut(|_: &mut _, m: Option<&glfw::Monitor>| {
+            glfw.with_primary_monitor(|_: &mut _, m: Option<&glfw::Monitor>| {
                 let monitor = m.expect("Did not get access to a monitor.");
 
                 let mode = monitor.get_video_mode().expect("Did not get access to the monitors preferred video mode.");

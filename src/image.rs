@@ -11,7 +11,7 @@ use errors::ProcessingErr;
 /// this function as the input to screen.texture(). It is not necessary to use this
 /// function, though. You can use whatever image crate and approach you want, just make /// sure that the input to screen.texture() is an image:::RgbaImage.
 pub fn load_image(filename: &str) -> Result<image_ext::RgbaImage, ProcessingErr> {
-    image_ext::open(filename).and_then(|img| Ok(img.to_rgba())).map_err(|e| ProcessingErr::ImageNotFound(e))
+    image_ext::open(filename).and_then(|img| Ok(img.to_rgba8())).map_err(|e| ProcessingErr::ImageNotFound(e))
 }
 
 use Screen;
@@ -60,6 +60,6 @@ impl<'a> Screen<'a> {
         }
         let fimg = image_ext::imageops::flip_vertical(&img);
 
-        fimg.save(&Path::new(filename)).map_err(|e| ProcessingErr::ImageNotSaved(e))
+        fimg.save(&Path::new(filename)).map_err(|e| ProcessingErr::ImageNotFound(e))
     }
 }

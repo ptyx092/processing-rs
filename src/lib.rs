@@ -86,16 +86,11 @@ use cocoa::base::nil;
 
 use nalgebra::{Matrix4, Vector3, Unit};
 
-#[cfg(not(feature = "glfw"))]
-pub use glium::*;
-#[cfg(not(feature = "glfw"))]
-pub mod screen;
-
-#[cfg(feature = "glfw")]
+//#[cfg(feature = "glfw")]
 extern crate glfw;
-#[cfg(feature = "glfw")]
+//#[cfg(feature = "glfw")]
 pub mod glfwp5;
-#[cfg(feature = "glfw")]
+//#[cfg(feature = "glfw")]
 pub use glfwp5::screen;
 
 #[macro_use]
@@ -109,19 +104,19 @@ pub mod rendering;
 pub mod image;
 pub mod errors;
 
-#[cfg(not(feature = "glfw"))]
-pub mod environment;
-#[cfg(feature = "glfw")]
+//#[cfg(not(feature = "glfw"))]
+//pub mod environment;
+//#[cfg(feature = "glfw")]
 pub use glfwp5::environment;
 
-#[cfg(not(feature = "glfw"))]
-pub mod input;
-#[cfg(feature = "glfw")]
+//#[cfg(not(feature = "glfw"))]
+//pub mod input;
+//#[cfg(feature = "glfw")]
 pub use glfwp5::input;
 
-#[cfg(not(feature = "glfw"))]
-pub mod constants;
-#[cfg(feature = "glfw")]
+//#[cfg(not(feature = "glfw"))]
+//pub mod constants;
+//#[cfg(feature = "glfw")]
 pub use glfwp5::constants;
 
 pub use constants::{Key, MouseButton};
@@ -147,78 +142,11 @@ pub struct DFBFDVertex {
 
 implement_vertex!(DFBFDVertex, position, texcoord);
 
-#[cfg(not(feature = "glfw"))]
-enum ScreenType {
-    Window(glium::Display),
-    Headless(glium::HeadlessRenderer),
-}
-
-/// This is essentially the central struct of `processing-rs`. It not only contains the
-/// the display window returned by glutin, but it also has a number of elements that
-/// maintain the render state and that manage a framebuffer for increased color
-/// fidelity. Its internal elements are mostly private and an instance of a Screen
-/// struct should be interacted with through the public functions provided in other
-/// modules, such as the shapes, environment, or textures modules.
-#[cfg(not(feature = "glfw"))]
-pub struct Screen<'a> {
-    fbtexture: glium::texture::Texture2d,
-    fb_shape_buffer: glium::VertexBuffer<DFBFDVertex>,
-    fb_index_buffer: glium::index::IndexBuffer<u16>,
-    fbo: owning_ref::OwningHandle<Box<FBtexs>, Box<glium::framebuffer::SimpleFrameBuffer<'a>>>,
-    display: ScreenType,
-    events_loop: glutin::EventsLoop,
-    draw_params: glium::draw_parameters::DrawParameters<'a>,
-    pub matrices: GLmatStruct,
-    bg_col: Vec<f32>,
-    fill_stuff: bool,
-    fill_col: Vec<f32>,
-    stroke_stuff: bool,
-    stroke_col: Vec<f32>,
-    tint_stuff: bool,
-    tint_col: Vec<f32>,
-    shader_bank: Vec<glium::program::Program>,
-    draw_texture: bool,
-    aspect_ratio: f32,
-    preserve_aspect_ratio: bool,
-    fb_size: Vec<u32>,
-    stroke_weight: f32,
-    font_face: String,
-    text_size: f32,
-    height: u32,
-    width: u32,
-    left: f32,
-    right: f32,
-    top: f32,
-    bottom: f32,
-    c_mode: String,
-    title: String,
-    ellipse_mode: String,
-    rect_mode: String,
-    shape_mode: String,
-    image_mode: String,
-    frame_rate: isize,
-    frame_count: isize,
-    fonts_initialized: bool,
-    curr_shader: usize,
-    curr_cursor: glium::glutin::MouseCursor,
-    wrap: glium::uniforms::SamplerWrapFunction,
-    alternate_shader: usize,
-    curr_texture: Option<glium::texture::Texture2d>,
-    using_alternate_shader: bool,
-    glsl_version: String,
-    drew_points: bool,
-    keypressed: Option<glutin::VirtualKeyCode>,
-    mousepressed: Option<glutin::MouseButton>,
-    mousereleased: Option<glutin::MouseButton>,
-    mousepos: (f64, f64),
-    headless: bool,
-}
-
-#[cfg(feature = "glfw")]
+//#[cfg(feature = "glfw")]
 use std::sync::mpsc::Receiver;
-#[cfg(feature = "glfw")]
+//#[cfg(feature = "glfw")]
 use glfwp5::backend::Display;
-#[cfg(feature = "glfw")]
+//#[cfg(feature = "glfw")]
 enum ScreenType {
     Window(Display),
     Headless(Display),
@@ -230,7 +158,7 @@ enum ScreenType {
 /// fidelity. Its internal elements are mostly private and an instance of a Screen
 /// struct should be interacted with through the public functions provided in other
 /// modules, such as the shapes, environment, or textures modules.
-#[cfg(feature = "glfw")]
+//#[cfg(feature = "glfw")]
 pub struct Screen<'a> {
     fbtexture: glium::texture::Texture2d,
     fb_shape_buffer: glium::VertexBuffer<DFBFDVertex>,
@@ -305,22 +233,22 @@ extern "C" {
 fn mac_priority() {
     // Prevent display from sleeping/powering down, prevent system
     // from sleeping, prevent sudden termination for any reason:
-    let NSActivityIdleDisplaySleepDisabled = (1u64 << 40);
-    let NSActivityIdleSystemSleepDisabled = (1u64 << 20);
-    let NSActivitySuddenTerminationDisabled = (1u64 << 14);
-    let NSActivityAutomaticTerminationDisabled = (1u64 << 15);
-    let NSActivityUserInitiated = (0x00FFFFFFu64 | NSActivityIdleSystemSleepDisabled);
-    let NSActivityLatencyCritical = 0xFF00000000u64;
+    let nsactivity_idle_display_sleep_disabled = 1u64 << 40;
+    let nsactivity_idle_system_sleep_disabled = 1u64 << 20;
+    let nsactivity_sudden_termination_disabled = 1u64 << 14;
+    let nsactivity_automatic_termination_disabled = 1u64 << 15;
+    let nsactivity_user_initiated = 0x00FFFFFFu64 | nsactivity_idle_system_sleep_disabled;
+    let nsactivity_latency_critical = 0xFF00000000u64;
 
-    let options = NSActivityIdleDisplaySleepDisabled | NSActivityIdleSystemSleepDisabled |
-        NSActivitySuddenTerminationDisabled |
-        NSActivityAutomaticTerminationDisabled;
-    let options = options | NSActivityUserInitiated | NSActivityLatencyCritical;
+    let options = nsactivity_idle_display_sleep_disabled | nsactivity_idle_system_sleep_disabled |
+        nsactivity_sudden_termination_disabled |
+        nsactivity_automatic_termination_disabled;
+    let options = options | nsactivity_user_initiated | nsactivity_latency_critical;
 
     unsafe {
         let pinfo = NSProcessInfo::processInfo(nil);
         let s = NSString::alloc(nil).init_str("timing");
-        msg_send![pinfo, beginActivityWithOptions:options reason:s];
+        let _:() = msg_send![pinfo, beginActivityWithOptions:options reason:s];
 
         setMaxPriority();
     }

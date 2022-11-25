@@ -123,7 +123,7 @@ impl<'a> Screen<'a> {
     pub fn scale(&mut self, x: f32, y: f32, z: f32) {
         // let m = Matrix4::new(x, 0., 0., 0., 0., y, 0., 0., 0., 0., z, 0., 0., 0., 0., 1.);
 
-        self.matrices.curr_matrix.append_nonuniform_scaling(
+        let _ = self.matrices.curr_matrix.append_nonuniform_scaling(
             &Vector3::new(x, y, z),
         ); //* self.matrices.curr_matrix;
     }
