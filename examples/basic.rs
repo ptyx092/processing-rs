@@ -25,19 +25,19 @@ fn main() -> Result<(), ProcessingErr> {
     let normal = Normal::new(0.0, 1.0);
     let mut rng = rand::thread_rng();
     let glf = p5::Screen::init()?;
-	let mut screen = p5::Screen::new(300, 300, glf, true, false, false)?;
+	let mut screen = p5::Screen::new(1000, 600, glf, false, false, false)?;
     //let mut screen = p5::Screen::new(300, 300, true, false, true)?;
 
-    let mut ftbf = [0; 600];
-    let mut ft = [0; 600];
+    //let mut ftbf = [0; 600];
+    //let mut ft = [0; 600];
     let mut x = 1;
-    let mut t = 0.;
+    let mut t:f32 = 0.;
 
     let img = p5::load_image("test.jpg")?;
     let (tex, _, _) = screen.texture(&img)?;
 
     screen.space_wait();
-    screen.no_cursor();
+    //screen.no_cursor();
 
     screen.stroke(&[0.], &[0.], &[0.], &[1.]);
     screen.fill(&[0.7], &[0.7], &[0.7], &[1.0]);
@@ -113,8 +113,10 @@ fn main() -> Result<(), ProcessingErr> {
     let mut r2 = Rect::new(&screen, &[-0.1], &[0.6], &[0.], &[0.2], &[0.2])?;
     r2.attach_texture(&tex);
 
-    while x < 600 {
-        let st = time::precise_time_ns();
+    //while x < 600
+    loop
+    {
+        //let st = time::precise_time_ns();
         screen.background(0.94, 0.92, 0.9, 1.0);
         screen.stroke_on();
         screen.draw(&e1)?;
@@ -139,21 +141,28 @@ fn main() -> Result<(), ProcessingErr> {
         screen.pop_matrix();
         screen.stroke_off();
         screen.draw(&r2)?;
-        // if screen.key_press(p5::Key::Space) {
-        //     screen.save("screenshot.png");
-        //     println!("key pressed and screenshot saved.");
-        // }
+        if screen.key_press(p5::Key::Space) {
+            let _ = screen.save("screenshot.png");
+            println!("key pressed and screenshot saved.");
+        }
+
+        if screen.key_press(p5::Key::Escape)
+        {
+            println!("exit");
+            break;
+        }
+
         if screen.mouse_press(p5::MouseButton::Left) {
             println!("bye!");
             break;
         }
-        ftbf[x - 1] = time::precise_time_ns() - st;
+        //ftbf[x - 1] = time::precise_time_ns() - st;
         screen.reveal()?;
-        ft[x - 1] = time::precise_time_ns() - st;
+        //ft[x - 1] = time::precise_time_ns() - st;
         t += 1. / 60.;
         x += 1;
     }
-
+/*
     let duration_s = (ft.iter().fold(0, |acc, v| acc + v) as f64) / 1_000_000_000f64;
     let fps = (x as f64) / duration_s;
     let dropped = (duration_s - (x as f64 * (1f64 / 60f64))) / (1f64 / 60f64);
@@ -175,7 +184,7 @@ fn main() -> Result<(), ProcessingErr> {
     for (_, x) in ft[35..ft.len() - 2].iter().enumerate() {
         t.push(*x as f64);
     }
-    println!("{:?}", std(&t));
+    println!("{:?}", std(&t));*/
     
     Ok(())
 }
